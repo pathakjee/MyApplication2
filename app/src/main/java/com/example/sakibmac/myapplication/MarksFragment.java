@@ -57,7 +57,7 @@ public class MarksFragment extends Fragment implements AdapterView.OnItemSelecte
     String classid[], secid[], subid[], examid[], cls;
     String clsid, seid, suid, exid;
     Realm myreal;
-
+    String type = null;
     RequestQueue queue;
 
     @Override
@@ -72,6 +72,14 @@ public class MarksFragment extends Fragment implements AdapterView.OnItemSelecte
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+
+        RealmResults<Sign> sig = myreal.where(Sign.class).findAll();
+
+//for each loop
+        for (Sign sign : sig) {
+            type = sign.getType();
+
+        }
 
         manage = v.findViewById(R.id.view);
         manage.setOnClickListener(new View.OnClickListener() {
@@ -379,6 +387,18 @@ public class MarksFragment extends Fragment implements AdapterView.OnItemSelecte
 
             final Compliment_Bean tutorListBeans = mallsList.get(position);
             final int s_id = tutorListBeans.getStudentid();
+            if (type.equals("Parent")) {
+
+                viewHolder.marks.setEnabled(false);
+                viewHolder.comments.setEnabled(false);
+                viewHolder.m_total.setEnabled(false);
+                viewHolder.ok.setVisibility(View.INVISIBLE);
+            } else if (type.equals("Student")) {
+                viewHolder.marks.setEnabled(false);
+                viewHolder.comments.setEnabled(false);
+                viewHolder.m_total.setEnabled(false);
+                viewHolder.ok.setVisibility(View.INVISIBLE);
+            }
 
 
             viewHolder.rollno.setText(tutorListBeans.getRoll());

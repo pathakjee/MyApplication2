@@ -350,6 +350,14 @@ public class DailyAttendance extends Fragment implements View.OnClickListener, O
             final Compliment_Bean tutorListBeans = mallsList.get(position);
             final String[] ss = {tutorListBeans.getStatus()};
             final int s_id = tutorListBeans.getStudentid();
+            String type = null;
+            RealmResults<Sign> sig = myreal.where(Sign.class).findAll();
+
+//for each loop
+            for (Sign sign : sig) {
+                type = sign.getType();
+
+            }
 
 
             viewHolder.rollno.setText(tutorListBeans.getRoll());
@@ -358,91 +366,93 @@ public class DailyAttendance extends Fragment implements View.OnClickListener, O
                     R.array.status, R.layout.support_simple_spinner_dropdown_item);
 
             viewHolder.sstatus.setAdapter(viewHolder.statusAdapter);
-            viewHolder.sstatus.setOnItemSelectedListener(new OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    String s = adapterView.getItemAtPosition(i).toString();
-                    SimpleDateFormat currentdate = new SimpleDateFormat("dd/MM/yyyy");
-                    Date today = new Date();
-                    String thisdate = currentdate.format(today);
-                    //       Toast.makeText(getActivity(), thisdate, Toast.LENGTH_SHORT).show();
-                    String date = datepicker.getText().toString();
+            if (type.equals("Teacher")) {
+
+                viewHolder.sstatus.setOnItemSelectedListener(new OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        String s = adapterView.getItemAtPosition(i).toString();
+                        SimpleDateFormat currentdate = new SimpleDateFormat("dd/MM/yyyy");
+                        Date today = new Date();
+                        String thisdate = currentdate.format(today);
+                        //       Toast.makeText(getActivity(), thisdate, Toast.LENGTH_SHORT).show();
+                        String date = datepicker.getText().toString();
 
 
-                    if (ss[0].equals("0")) {
-                        s = "Undefined";
-                        viewHolder.status.setText(s);
-                        ss[0] = "";
+                        if (ss[0].equals("0")) {
+                            s = "Undefined";
+                            viewHolder.status.setText(s);
+                            ss[0] = "";
 
-                    } else if (ss[0].equals("1")) {
-                        s = "Present";
-                        viewHolder.status.setText(s);
-                        ss[0] = "";
-                    } else if (ss[0].equals("2")) {
-                        s = "Absent";
-                        viewHolder.status.setText(s);
-                        ss[0] = "";
-                    } else if (date != thisdate) {
+                        } else if (ss[0].equals("1")) {
+                            s = "Present";
+                            viewHolder.status.setText(s);
+                            ss[0] = "";
+                        } else if (ss[0].equals("2")) {
+                            s = "Absent";
+                            viewHolder.status.setText(s);
+                            ss[0] = "";
+                        } else if (date != thisdate) {
 
-                        viewHolder.status.setText(s);
-                        final ProgressDialog loading = ProgressDialog.show(getActivity(), "Updating", "Please wait...", false, false);
-                        final int newStatus = i;
-                        String t = null;
-                        RealmResults<Sign> sig = myreal.where(Sign.class).findAll();
+                            viewHolder.status.setText(s);
+                            final ProgressDialog loading = ProgressDialog.show(getActivity(), "Updating", "Please wait...", false, false);
+                            final int newStatus = i;
+                            String t = null;
+                            RealmResults<Sign> sig = myreal.where(Sign.class).findAll();
 
 //for each loop
-                        for (Sign sign : sig) {
-                            t = sign.getId();
+                            for (Sign sign : sig) {
+                                t = sign.getId();
 
-                        }
-                        final String t_id = t;
-                        String ur = "http://wbheaventech.com/SchoolManagementApp/image/attendence.php";
-                        StringRequest request = new StringRequest(Request.Method.POST, ur,
-                                new Response.Listener<String>() {
+                            }
+                            final String t_id = t;
+                            String ur = "http://wbheaventech.com/SchoolManagementApp/image/attendence.php";
+                            StringRequest request = new StringRequest(Request.Method.POST, ur,
+                                    new Response.Listener<String>() {
 
 
-                                    public void onResponse(String response) {
-                                        if (response.equals("true")) {
-                                            Toast.makeText(getActivity(), "update", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getActivity(), "not update", Toast.LENGTH_SHORT).show();
+                                        public void onResponse(String response) {
+                                            if (response.equals("true")) {
+                                                Toast.makeText(getActivity(), "update", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getActivity(), "not update", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                            loading.dismiss();
 
                                         }
-                                        loading.dismiss();
+                                    }, new Response.ErrorListener() {
 
-                                    }
-                                }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getActivity(), "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            })
 
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getActivity(), "" + error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        })
+                            {
+                                protected Map<String, String> getParams() throws AuthFailureError {
 
-                        {
-                            protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> param = new HashMap<String, String>();
+                                    param.put("student_id", String.valueOf(s_id));
+                                    param.put("teacher_id", t_id);
+                                    param.put("status", String.valueOf(newStatus));
+                                    return param;
+                                }
+                            };
+                            queue.add(request);
 
-                                Map<String, String> param = new HashMap<String, String>();
-                                param.put("student_id", String.valueOf(s_id));
-                                param.put("teacher_id", t_id);
-                                param.put("status", String.valueOf(newStatus));
-                                return param;
-                            }
-                        };
-                        queue.add(request);
+                        } else {
+                            Toast.makeText(getActivity(), "select current date", Toast.LENGTH_SHORT).show();
 
-                    } else {
-                        Toast.makeText(getActivity(), "select current date", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
                     }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-
+                });
+            }
 
         }
 

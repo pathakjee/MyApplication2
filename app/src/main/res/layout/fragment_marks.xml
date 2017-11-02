@@ -112,7 +112,7 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <ScrollView
+    <HorizontalScrollView
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rl"
@@ -120,13 +120,13 @@
 
         <RelativeLayout
 
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="12dp">
 
             <LinearLayout
                 android:id="@+id/ll"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
@@ -173,12 +173,12 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/ll"
                 android:layout_marginTop="10dp" />
 
         </RelativeLayout>
 
-    </ScrollView>
+    </HorizontalScrollView>
 </RelativeLayout>
