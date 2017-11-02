@@ -23,6 +23,7 @@ public class Accounting extends Fragment {
     ImageView image;
     Realm myreal;
     String ltype;
+
     RelativeLayout rfname, rmname, rclass, rroll, rblood, rrel, rbir;
     ProgressDialog loading1;
 
