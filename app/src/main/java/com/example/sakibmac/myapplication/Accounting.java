@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+
 public class Accounting extends Fragment {
     TextView name, contact, email, birthday, religion, clas, blood, fname, mname, gender, address, roll;
     ImageView image;
