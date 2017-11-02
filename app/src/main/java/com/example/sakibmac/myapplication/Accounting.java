@@ -26,6 +26,7 @@ public class Accounting extends Fragment {
     RelativeLayout rfname, rmname, rclass, rroll, rblood, rrel, rbir;
     ProgressDialog loading1;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
