@@ -338,9 +338,6 @@ public class MarksFragment extends Fragment implements AdapterView.OnItemSelecte
                 }
             }
         });
-        //} else {
-        //  showConnectionErrorDialog();
-        //}
     }
 
     private void showConnectionErrorDialog() {
